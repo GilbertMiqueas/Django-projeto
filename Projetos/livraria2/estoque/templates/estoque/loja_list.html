@@ -1,0 +1,106 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<button class="collapsible button outline dark icon"> Cadastrar Loja <img src="https://icongr.am/feather/shopping-cart.svg?size=18&color=3f4144" alt="icon">
+</button>
+<div class="toggle">
+	<form id="loja-form" action="{% url 'loja-create' %}">
+		{% csrf_token %} {{ form.non_field_error }}
+		<p>
+			{{ form.nome.errors }} {{ form.nome.label_tag }} {{ form.nome }}
+			<small id="nome_taken"></small>
+		</p>
+		<p>
+			{{ form.livros.errors }} {{ form.livros.label_tag }} {{ form.livros }}
+		</p>
+		<p>
+			{{ form.quatidade_de_clientes.errors }} {{ form.quatidade_de_clientes.label_tag }} {{ form.quatidade_de_clientes }}
+		</p>
+		<button type="submit" class="button primary">Criar</button>
+	</form>
+</div>
+
+<div id="lojas-table">
+	<table class='striped'>
+		<caption>{{ page_info_plural }}</caption>
+		<thead>
+			<tr>
+				<th>---</th>
+				<th>Nome da Loja</th>
+				<th>Livros</th>
+				<th>Número de clientes</th>
+				<th>Editar</th>
+				<th>Remover</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+		{% for obj in object_list %}
+		<tr>
+			{# contador de iterações do for #}
+			<td>{{ forloop.counter }}</td>
+			<td>{{ obj.nome }}</td>
+			<td>{% for livro in obj.livros.all %}
+				{{livro.nome}}
+				{% endfor %}
+			</td>
+			<td class="is-text-center">{{ obj.quatidade_de_clientes }}</td>
+			<td>
+				<a class="button clear" href="{% url 'loja-update' obj.pk %}">
+					<img src="https://icongr.am/feather/edit.svg?size=20&color=00b300"></a>
+				</td>
+				<td>
+					<a class="button clear" href="{% url 'generic-delete' obj.pk 'estoque' 'Loja' %}?success_url={% url 'loja-list' %}"><img src="https://icongr.am/feather/delete.svg?size=20&color=e60000"></a>
+				</td>
+				{% empty %}
+				<tr>
+					<td class="is-text-center" colspan="100%">Nenhuma Loja Cadastrada</td>
+				</tr>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock content %}
+{% block js %}
+<!--nao funcionando por algum motivo :(-->
+<script type="text/javascript">
+	$('#loja-form').submit(function(event) {
+		event.preventDefault();
+		var form = $(this);
+		$.ajax({
+			url: form.attr("action"),
+			data: form.serialize(),
+			dataType: 'json',
+			method: 'POST',
+			success: function(data){
+				if ('errors' in data){
+					alert('ERRO');
+				} else {
+					$('#lojas-table').load("{% url 'loja-list' %} #loja-table");
+					alert('Cadastro com sucesso');
+					form.trigger("reset");
+				}
+			}
+		});
+	});
+</script>
+<script type="text/javascript">
+	$("#id_nome").change(function() {
+		var nome  = $(this).val();
+		$.ajax({
+			url: '{% url "loja-taken" %}',
+			data: {
+				'nome': nome
+			},
+			dataType: 'json',
+			success: function (data) {
+				if (data.is_taken) {
+					$('#nome_taken').html('Já cadastrado!');
+				} else {
+					$('#nome_taken').html('Nome válido!');
+				}
+			}
+		});
+	});
+</script>
+{% endblock js %}

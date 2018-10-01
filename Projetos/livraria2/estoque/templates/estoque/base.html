@@ -1,0 +1,62 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+ 	<meta charset="utf-8">
+ 	<title>Livraria</title>
+ 	<link rel="stylesheet" href="https://unpkg.com/chota@latest">
+ 	
+ 	
+ </head>
+
+ <body>
+ 	{% block login %}
+ 	{% if user.is_authenticated %}
+ 	<div class="pull-right">
+ 		<a href="{% url 'logout' %}" class="button outline primary">Logout</a>
+ 	</div>
+ 	{% else %}
+ 	<div class="pull-right">
+ 		<a href="{% url 'login' %}" class="button outline primary">Fazer Login</a>
+ 	</div>
+ 	{% endif %}
+ 	{% endblock login %}
+
+ 	<div class="container">
+ 		<div class="hero is-full-screen">
+ 			<h1 class="is-text-center">{{ page_info }}</h1>
+ 			<nav class="tabs is-center">
+ 				<a href="/">Início</a>
+ 				<a href="{% url 'livro-list' %}">Livros</a>
+ 				<a href="{% url 'autor-list' %}">Autores</a>
+ 				<a href="{% url 'editora-list' %}">Editoras</a>
+ 				<a href="{% url 'loja-list' %}">Lojas</a>
+ 			</nav>
+ 			<style> 	
+ 			.toggle {
+ 				padding: 0 18px;
+ 				display: none;
+ 				overflow: hidden;
+ 				background-color: #f1f1f1;
+ 			}
+ 		</style>
+
+ 		{% block content %}
+ 		Bloquito
+ 		{% endblock content %}
+ 	</div>
+ 	<footer class="is-text-center">
+ 		<p></p>
+ 		<p></p>
+ 	</footer>
+ </div>
+ <script src="http://code.jquery.com/jquery-3.1.0.min.js"></script>
+ {% block js %}
+ {% endblock js %}
+ <script type="text/javascript">
+	//JQuery para esconder botão pesquisa/criar
+	$('.collapsible').click(function(){
+		$('.toggle').toggle();
+	});
+</script>
+</body>
+</html>

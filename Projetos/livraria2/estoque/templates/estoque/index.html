@@ -1,0 +1,42 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col">
+      <h4 class="is-center">
+        Estoque da Livraria
+      </h4>
+      <table class="striped">
+        <caption></caption>
+        <tr>
+          <td class="is-right">Quantidade de Livros</td>
+          <th style="width: 50%">{{ qtd_livros }}</th>
+        </tr>
+        <tr>
+          <td class="is-right">Quantidade de Autores</td>
+          <th>{{ qtd_autores }}</th>
+        </tr>
+        <tr>
+          <td class="is-right">Quantidade de Editoras</td>
+          <th>{{ qtd_editoras }}</th>
+        </tr>
+        <tr>
+          <td class="is-right">Quantidade de Lojas</td>
+          <th>{{ qtd_lojas }}</th>
+        </tr>
+        <tr>
+          <td class="is-right">Preço médio do Livro</td>
+          <th>{{ livro_preco_medio }}</th>
+        </tr>
+        <tr>
+          <td class="is-right">Livro mais Caro</td>
+          <th>{{ livro_mais_caro }} - R${{ livro_mais_caro.preco }}</th>
+        </tr>
+        <tr>
+          <td class="is-right">Livro mais Barato</td>
+          <th>{{ livro_mais_barato }} - R${{ livro_mais_barato.preco }}</th>
+        </tr>
+      </table>
+  </div>
+</div>
+{% endblock content %}

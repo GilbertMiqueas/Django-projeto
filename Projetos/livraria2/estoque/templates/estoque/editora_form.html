@@ -1,0 +1,34 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+	<form method="POST">
+		{% csrf_token %} {{ form.non_field_error }}
+		<p>
+			{{ form.nome.errors }} {{ form.nome.label_tag }} {{ form.nome }}
+			<small id="nome_taken"></small>
+		</p>
+			{{ form.avaliacao.errors }} {{ form.avaliacao.label_tag }} {{ form.avaliacao }}
+		<button type="submit" class="button primary">Confirmar</button>
+	</form>
+{% endblock content %}
+{% block js %}
+<script type="text/javascript">
+	$("#id_nome").change(function() {
+		var nome  = $(this).val();
+		$.ajax({
+			url: '{% url "editora-taken" %}',
+			data: {
+				'nome': nome
+			},
+			dataType: 'json',
+			success: function (data) {
+				if (data.is_taken) {
+					$('#nome_taken').html('Já cadastrado!');
+				} else {
+					$('#nome_taken').html('Nome válido!');
+				}
+			}
+		});
+	});
+</script>
+{% endblock js %}

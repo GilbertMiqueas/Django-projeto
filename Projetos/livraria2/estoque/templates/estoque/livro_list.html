@@ -1,0 +1,71 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<div class="pull-right">
+  <a href="{% url 'livro-create' %}">
+   <button class="button outline dark icon">Cadastrar Livro <img src="https://icongr.am/feather/book.svg?size=18&color=3f4144" alt="icon">
+   </button>
+ </a>
+</div>
+<div>
+  <button class="collapsible button outline dark icon"><img src="https://icongr.am/feather/search.svg?size=24" alt="icon"></button>
+  <div class="toggle">
+    <form method="GET">
+     {{ form.as_p }}
+     <button type="submit" class="button primary">Pesquisar</button>
+   </form>
+ </div>
+</div>
+
+<table class="striped">
+
+  <thead>
+    <tr>
+      <th>---</th>
+      <th>Nome</th>
+      <th>Páginas</th>
+      <th>Preço</th>
+      <th>Avaliação</th>
+      <th>Autores</th>
+      <th>Editora</th>
+      <th>Data da Publicação</th>
+      <th>Editar</th>
+      <th>Remover</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for obj in object_list %}
+    <tr>
+      {# contador de iterações do for #}
+      <td>{{ forloop.counter }}</td>
+      <td>{{ obj.nome }}</td>
+      <td>{{ obj.paginas }}</td>
+      <td>{{ obj.preco }}</td>
+      <td class="is-text-center">{{ obj.avaliacao }}</td>
+      <td>
+        {% for autor in obj.autores.all %}
+        {{ autor }}
+        {% endfor %}
+      </td>
+      <td>{{ obj.editora }}</td>
+      <td>{{ obj.data_de_publcacao }}</td>
+      <td>
+        <a class="button clear" href="{% url 'livro-update' obj.pk %}">
+          <img src="https://icongr.am/feather/edit.svg?size=20&color=00b300"></a>
+        </td>
+        <td>
+          <a class="button clear" href="{% url 'generic-delete' obj.pk 'estoque' 'Livro' %}?success_url={% url 'livro-list' %}"><img src="https://icongr.am/feather/delete.svg?size=20&color=e60000"></a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td class="is-text-center" colspan="100%">Nenhum Livro Cadastrado</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endblock content %}
+
+  {% block js %}
+  {% endblock js %}

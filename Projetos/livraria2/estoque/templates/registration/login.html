@@ -1,0 +1,15 @@
+{% extends 'estoque/base.html' %}
+
+{% block login %}
+{% endblock login %}
+{% block content %}
+<h2 class="is-text-center">Login</h2>
+<form method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<div class="pull-right">
+		<a href="{% url 'cadastro' %}" class="button clear">Não cadastrado? Crie uma conta</a>
+	</div>
+	<button type="submit">Login</button>
+</form>
+{% endblock %}
